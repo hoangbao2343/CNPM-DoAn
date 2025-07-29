@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="9333f16786dc4bf7950005124f27f337" Name="Diagram1">
+        <EntityTypeShape EntityType="CNPM_WEB_BAN_HANGModel.Danh_Muc" Width="1.5" PointX="0.75" PointY="2.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CNPM_WEB_BAN_HANGModel.Hinh_Anh_San_Pham" Width="1.5" PointX="5.25" PointY="2.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="CNPM_WEB_BAN_HANGModel.Khach_Hang" Width="1.5" PointX="10.25" PointY="6" IsExpanded="true" />
+        <EntityTypeShape EntityType="CNPM_WEB_BAN_HANGModel.Khuyen_Mai" Width="1.5" PointX="0.75" PointY="6.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="CNPM_WEB_BAN_HANGModel.Nha_Xuat_Ban" Width="1.5" PointX="0.75" PointY="9.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="CNPM_WEB_BAN_HANGModel.Phuong_Thuc_Thanh_Toan" Width="1.5" PointX="7.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CNPM_WEB_BAN_HANGModel.Role" Width="1.5" PointX="5.75" PointY="6.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="CNPM_WEB_BAN_HANGModel.San_Pham" Width="1.5" PointX="3" PointY="1.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="CNPM_WEB_BAN_HANGModel.sysdiagram" Width="1.5" PointX="2.75" PointY="7.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CNPM_WEB_BAN_HANGModel.Tac_Gia" Width="1.5" PointX="0.75" PointY="12.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="CNPM_WEB_BAN_HANGModel.The_Loai" Width="1.5" PointX="0.75" PointY="14.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CNPM_WEB_BAN_HANGModel.Trang_Thai" Width="1.5" PointX="0.75" PointY="17.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="CNPM_WEB_BAN_HANGModel.USER" Width="1.5" PointX="8" PointY="6.125" IsExpanded="true" />
+        <AssociationConnector Association="CNPM_WEB_BAN_HANGModel.fk_sanpham_danhmuc" ManuallyRouted="false" />
+        <AssociationConnector Association="CNPM_WEB_BAN_HANGModel.FK__Hinh_Anh___MA_SP__05D8E0BE" ManuallyRouted="false" />
+        <AssociationConnector Association="CNPM_WEB_BAN_HANGModel.fk_users_khach_hang" ManuallyRouted="false" />
+        <AssociationConnector Association="CNPM_WEB_BAN_HANGModel.fk_sanpham_khuyenmai" ManuallyRouted="false" />
+        <AssociationConnector Association="CNPM_WEB_BAN_HANGModel.fk_sanpham_nxb" ManuallyRouted="false" />
+        <AssociationConnector Association="CNPM_WEB_BAN_HANGModel.fk_users_roles" ManuallyRouted="false" />
+        <AssociationConnector Association="CNPM_WEB_BAN_HANGModel.fk_sanpham_tacgia" ManuallyRouted="false" />
+        <AssociationConnector Association="CNPM_WEB_BAN_HANGModel.fk_sanpham_theloai" ManuallyRouted="false" />
+        <AssociationConnector Association="CNPM_WEB_BAN_HANGModel.fk_sanpham_trangthai" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

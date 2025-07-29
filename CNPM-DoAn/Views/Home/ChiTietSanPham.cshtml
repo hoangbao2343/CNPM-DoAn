@@ -1,0 +1,378 @@
+﻿@model CNPM_DoAn.dtb.San_Pham
+
+@{
+    ViewBag.Title = "thongtinsanpham";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Giao diện Fahasa.com - Chi tiết sách</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #c8c8c8;
+            color: #000;
+        }
+
+        header {
+            background: #d1d1d1;
+            padding: 10px 20px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            user-select: none;
+            border-bottom: 3px solid #0074cc;
+        }
+
+            header .logo {
+                font-weight: bold;
+                font-size: 1.4rem;
+                color: #000;
+                border-bottom: 3px solid #0074cc;
+                cursor: default;
+                flex-shrink: 0;
+            }
+
+            header .search-container {
+                flex: 1;
+                display: flex;
+                justify-content: center;
+            }
+
+            header .search-box {
+                position: relative;
+                width: 300px;
+                max-width: 100%;
+            }
+
+                header .search-box input[type="search"] {
+                    width: 100%;
+                    padding: 10px 15px 10px 40px;
+                    border-radius: 20px;
+                    border: none;
+                    outline: none;
+                    font-size: 1rem;
+                    color: #555;
+                }
+
+                    header .search-box input[type="search"]::placeholder {
+                        color: #999;
+                        font-style: italic;
+                    }
+
+                header .search-box .icon-search {
+                    position: absolute;
+                    left: 14px;
+                    top: 50%;
+                    transform: translateY(-50%);
+                    width: 18px;
+                    height: 18px;
+                    fill: #777;
+                    pointer-events: none;
+                }
+
+            header .icons {
+                display: flex;
+                gap: 25px;
+                align-items: center;
+                flex-shrink: 0;
+            }
+
+                header .icons svg {
+                    width: 22px;
+                    height: 22px;
+                    fill: black;
+                    cursor: pointer;
+                    transition: fill 0.2s ease-in-out;
+                }
+
+                    header .icons svg:hover {
+                        fill: #0074cc;
+                    }
+
+        main {
+            max-width: 900px;
+            margin: 30px auto;
+            background: white;
+            padding: 25px 30px 30px 30px;
+            display: flex;
+            gap: 30px;
+            flex-wrap: wrap;
+            border-radius: 6px;
+            box-shadow: 0 4px 12px rgb(0 0 0 / 0.1);
+        }
+
+        .left-section {
+            flex: 0 0 280px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .main-image {
+            width: 280px;
+            height: 280px;
+            background-color: #eee; /* bỏ khung đen */
+            position: relative;
+        }
+
+            .main-image img {
+                width: 100%;
+                height: 100%;
+                object-fit: contain;
+                display: block;
+            }
+
+        .thumbs {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+            .thumbs img {
+                width: 60px;
+                height: 60px;
+                background-color: #eee;
+                object-fit: contain;
+                cursor: pointer;
+                transition: border-color 0.2s ease-in-out;
+            }
+
+                .thumbs img:hover,
+                .thumbs img.active {
+                    border: 2px solid #0074cc;
+                }
+
+        .right-section {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            min-width: 280px;
+            position: relative;
+        }
+
+        .book-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .book-title {
+            font-size: 1.6rem;
+            font-weight: bold;
+            color: #333;
+            margin-right: 10px;
+        }
+
+        .book-code {
+            font-size: 1rem;
+            color: #555;
+        }
+
+        .book-info {
+            background: #f9f9f9;
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            line-height: 1.5rem;
+        }
+
+        .price {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #d32f2f;
+            margin-top: 5px;
+        }
+
+        .buttons {
+            margin-top: 5px;
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .btn-buy-now,
+        .btn-add-cart {
+            font-weight: 600;
+            font-size: 1rem;
+            border: none;
+            cursor: pointer;
+            padding: 12px 28px;
+            border-radius: 6px;
+            user-select: none;
+            transition: background-color 0.3s ease-in-out;
+            min-width: 140px;
+            text-align: center;
+        }
+
+        .btn-buy-now {
+            background-color: #d32f2f;
+            color: white;
+        }
+
+            .btn-buy-now:hover {
+                background-color: #b02626;
+            }
+
+        .btn-add-cart {
+            background-color: #2f2f2f;
+            color: white;
+        }
+
+            .btn-add-cart:hover {
+                background-color: #1e1e1e;
+            }
+
+        .author-info {
+            margin-top: 20px;
+            font-size: 0.9rem;
+            line-height: 1.4rem;
+            user-select: text;
+            white-space: pre-line;
+            color: #303030;
+        }
+
+        screen and (max-width: 700px) {
+            main
+
+        {
+            flex-direction: column;
+            max-width: 95%;
+        }
+
+        .left-section {
+            flex: unset;
+            width: 100%;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .right-section {
+            width: 100%;
+        }
+
+        .book-info {
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: space-between;
+        }
+        }
+    </style>
+</head>
+
+<body>
+    <header role="banner" aria-label="Site header">
+        <div class="logo" aria-label="Trang chủ Fahasa.com" tabindex="0">Fahasa.com</div>
+
+        <div class="search-container" role="search">
+            <form onsubmit="return false;">
+                <label for="search-input" class="sr-only">Tìm kiếm sách, sản phẩm</label>
+                <div class="search-box">
+                    <input type="search" id="search-input" name="search" placeholder="Hinted search text" aria-describedby="search-desc" />
+                    <svg class="icon-search" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                        <path d="M10 2a8 8 0 105.293 14.707l4.147 4.146 1.414-1.414-4.146-4.147A8 8 0 0010 2zm0 2a6 6 0 110 12 6 6 0 010-12z" />
+                    </svg>
+                </div>
+            </form>
+        </div>
+
+        <nav class="icons" aria-label="Menu icons">
+            <svg role="img" aria-label="Thông báo" tabindex="0" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 2a7 7 0 00-7 7v4L4 16v1h16v-1l-1-3v-4a7 7 0 00-7-7zm0 20a2 2 0 002-2H10a2 2 0 002 2z" />
+            </svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cart-fill" viewBox="0 0 16 16">
+                <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5M5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4m7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4m-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2m7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2" />
+            </svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-fill" viewBox="0 0 16 16">
+                <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6" />
+            </svg>
+        </nav>
+    </header>
+
+    <main>
+        <section class="left-section" aria-label="Hình ảnh sản phẩm sách">
+            <div class="main-image" aria-live="polite">
+                <img id="mainImg"
+                    src="~/@Model.HINH_ANH"
+                     alt="@Model.TEN_SP" />
+            </div>
+
+            <div class="thumbs" role="list" aria-label="Hình ảnh thu nhỏ sách">
+                @if (Model.Hinh_Anh_San_Pham != null && Model.Hinh_Anh_San_Pham.Any())
+                {
+                    foreach (var img in Model.Hinh_Anh_San_Pham)
+                    {
+                        <img src="~/@img.LINK_ANH" alt="Hình thu nhỏ" role="listitem" tabindex="0" />
+                    }
+                }
+                else
+                {
+                    <img src="~/@Model.HINH_ANH" alt="Hình mặc định" />
+                }
+            </div>
+
+            <div class="buttons">
+                <button class="btn-buy-now" type="button">Mua ngay</button>
+                <button class="btn-add-cart" type="button">Thêm vào giỏ hàng</button>
+            </div>
+        </section>
+
+        <section class="right-section">
+            <div class="book-header">
+                <h1 class="book-title">@Model.TEN_SP</h1>
+                <span class="book-code">Mã: @Model.MA_SP</span>
+            </div>
+
+            <div class="book-info">
+                <div><strong>Nhà xuất bản:</strong> @Model.ID_NXB</div>
+                <div><strong>Nhà cung cấp:</strong> Japanbook</div>
+            </div>
+
+            <div class="price">
+                @(Model.GIA_BAN.HasValue ? Model.GIA_BAN.Value.ToString("N0") + " VNĐ" : "Liên hệ")
+            </div>
+            <article class="author-info">
+                <p>Thông tin về sách:</p>
+                <ul>
+                    <li>Là nhà văn người Mỹ, chuyên gia về văn học Hy Lạp cổ đại.</li>
+                    <li>Bà từng giảng dạy về Iliad và Odyssey suốt hơn 10 năm.</li>
+                    <li>Trường Ca Achilles giúp bà giành Giải Orange Prize 2012.</li>
+                    <li>Được đề cử Women’s Prize 2019 cùng Circe.</li>
+                </ul>
+            </article>
+        </section>
+    </main>
+
+    <script>
+        const mainImg = document.getElementById("mainImg");
+        const thumbs = document.querySelectorAll(".thumbs img");
+
+        thumbs.forEach((thumb) => {
+            thumb.addEventListener("click", () => {
+                mainImg.src = thumb.src;
+                thumbs.forEach(t => t.classList.remove("active"));
+                thumb.classList.add("active");
+            });
+        });
+
+        if (thumbs.length > 0) {
+            thumbs[0].classList.add("active");
+        }
+    </script>
+</body>
+</html>
+

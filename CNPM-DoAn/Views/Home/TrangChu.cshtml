@@ -1,0 +1,1064 @@
+﻿@model Dictionary<string, List<CNPM_DoAn.dtb.San_Pham>>
+
+
+@{
+    ViewBag.Title = "TrangChu";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fahasha | Nhà sách trực tuyến</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /*CSS*/
+        .book-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+
+        .hero-image {
+            background-image: url('../../content/image/nhagiakim.png');
+            background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://images.unsplash.com/photo-1589998059171-988d322dfe03?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=772&q=80');
+            background-size: cover;
+            background-position: center;
+        }
+
+        .fade-in {
+            animation: fadeIn 1s ease-in;
+        }
+
+        .search-box:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.5);
+        }
+
+        /* Modal animation */
+        #login-modal, #account-modal, #cart-modal {
+            transition: opacity 0.3s ease;
+        }
+
+            #login-modal:not(.hidden), #account-modal:not(.hidden), #cart-modal:not(.hidden) {
+                animation: fadeIn 0.3s ease;
+            }
+
+        .cart-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background-color: #EF4444;
+            color: white;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            font-size: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans">
+    <!-- Header/Navigation -->
+    <header class="bg-white shadow-md sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <i class="fas fa-book-open text-red-600 text-2xl"></i>
+                <h1 class="text-2xl font-bold text-gray-800">Fahasha</h1>
+            </div>
+
+            <div class="hidden md:flex space-x-6">
+                <a href="#" class="text-gray-800 hover:text-blue-600 font-medium">Home</a>
+                <a href="#" class="text-gray-800 hover:text-blue-600 font-medium">Books</a>
+                <a href="#" class="text-gray-800 hover:text-blue-600 font-medium">Categories</a>
+                <a href="#" class="text-gray-800 hover:text-blue-600 font-medium">About</a>
+                <a href="#" class="text-gray-800 hover:text-blue-600 font-medium">Contact</a>
+            </div>
+
+            <div class="flex items-center space-x-4">
+                <div class="relative hidden md:block">
+                    <input type="text" placeholder="Search books..." class="search-box pl-10 pr-4 py-2 rounded-full border border-gray-300 focus:border-blue-500 w-64">
+                    <i class="fas fa-search absolute left-3 top-2.5 text-gray-400"></i>
+                </div>
+                <div class="flex space-x-2">
+                    <button id="cart-btn" class="p-2 rounded-full hover:bg-gray-100 relative">
+                        <i class="fas fa-shopping-cart text-gray-700"></i>
+                        <span id="cart-badge" class="cart-badge hidden">0</span>
+                    </button>
+                    <button id="account-btn" class="p-2 rounded-full hover:bg-gray-100">
+                        <i class="fas fa-user text-gray-700"></i>
+                    </button>
+                </div>
+                <button id="mobile-menu-button" class="md:hidden p-2 rounded-full hover:bg-gray-100">
+                    <i class="fas fa-bars text-gray-700"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-t py-2 px-4">
+            <div class="mb-3">
+                <input type="text" placeholder="Search books..." class="search-box w-full pl-10 pr-4 py-2 rounded-full border border-gray-300">
+                <i class="fas fa-search absolute left-6 top-3 text-gray-400"></i>
+            </div>
+            <div class="flex flex-col space-y-2">
+                <a href="#" class="block py-2 text-gray-800 hover:text-blue-600">Home</a>
+                <a href="#" class="block py-2 text-gray-800 hover:text-blue-600">Books</a>
+                <a href="#" class="block py-2 text-gray-800 hover:text-blue-600">Categories</a>
+                <a href="#" class="block py-2 text-gray-800 hover:text-blue-600">About</a>
+                <a href="#" class="block py-2 text-gray-800 hover:text-blue-600">Contact</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero-image text-white py-20 md:py-32 fade-in">
+        <div class="container mx-auto px-4 text-center">
+            <h1 class="text-4xl md:text-6xl font-bold mb-6">Khám phá thế giới sách trực tuyến</h1>
+            <p class="text-xl md:text-2xl mb-8 max-w-2xl mx-auto">Hơn 100,000 tựa sách với nhiều thể loại đa dạng dành cho bạn.</p>
+            <div class="flex flex-col md:flex-row justify-center gap-4">
+                <button class="bg-red-600 hover:bg-red-700 px-8 py-3 rounded-full font-medium transition duration-300">Xem sách</button>
+                <button class="bg-white hover:bg-gray-100 text-gray-800 px-8 py-3 rounded-full font-medium transition duration-300">Khuyến mãi</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Books -->
+    <section class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-center mb-10">
+                <h2 class="text-3xl font-bold text-gray-800">Sách nổi bật</h2>
+                <a href="#" class="text-red-600 hover:text-red-800 font-medium flex items-center">
+                    Xem tất cả <i class="fas fa-arrow-right ml-2"></i>
+                </a>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+                <!-- Book Card 1 -->
+                @foreach (var group in Model)
+                {
+                    <h2 class="text-2xl font-bold text-gray-800 mb-4">@group.Key</h2>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-12">
+                        @foreach (var sp in group.Value)
+                        {
+                          <a href="@Url.Action("ChiTiet", "SanPham", new { id = sp.MA_SP })" class="block">
+                              <div class="book-card bg-white rounded-lg overflow-hidden shadow-md transition duration-300">
+                                  <div class="relative">
+                                      <img src="~/@sp.HINH_ANH" alt="@sp.TEN_SP" class="w-full h-64 object-cover" />
+                                      <div class="absolute top-2 right-2 bg-yellow-400 text-xs font-bold px-2 py-1 rounded">
+                                          @(sp.DISCOUNT > 0 ? $"{sp.DISCOUNT}% OFF" : "Mới")
+                                      </div>
+                                  </div>
+                                  <div class="p-4">
+                                      <h3 class="font-bold text-lg mb-1">@sp.TEN_SP</h3>
+                                      <p class="text-gray-600 text-sm mb-2">@sp.MO_TA</p>
+                                      <div class="flex justify-between items-center">
+                                          <span class="font-bold text-gray-800">
+                                              @String.Format("{0:#,##0} đ", sp.GIA_BAN)
+                                          </span>
+                                          <button class="add-to-cart bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm transition duration-300"
+                                                  data-id="@sp.MA_SP"
+                                                  data-title="@sp.TEN_SP"
+                                                  data-price="@sp.GIA_BAN"
+                                                  data-image="@sp.HINH_ANH">
+                                              Add to Cart
+                                          </button>
+                                      </div>
+                                  </div>
+                              </div>
+                          </a>
+                        }
+                    </div>
+                }
+                
+            </div>
+        </div>
+    </section>
+
+    <!-- Categories Section -->
+    <section class="py-16 bg-gray-100">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-gray-800 mb-10 text-center">Browse Categories</h2>
+
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+                <a href="#" class="category-card bg-white rounded-lg p-6 text-center shadow-sm hover:shadow-md transition duration-300">
+                    <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                        <i class="fas fa-book text-blue-600 text-xl"></i>
+                    </div>
+                    <h3 class="font-medium text-gray-800">Fiction</h3>
+                </a>
+
+                <a href="#" class="category-card bg-white rounded-lg p-6 text-center shadow-sm hover:shadow-md transition duration-300">
+                    <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                        <i class="fas fa-globe text-green-600 text-xl"></i>
+                    </div>
+                    <h3 class="font-medium text-gray-800">Non-Fiction</h3>
+                </a>
+
+                <a href="#" class="category-card bg-white rounded-lg p-6 text-center shadow-sm hover:shadow-md transition duration-300">
+                    <div class="w-16 h-16 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                        <i class="fas fa-magic text-yellow-600 text-xl"></i>
+                    </div>
+                    <h3 class="font-medium text-gray-800">Fantasy</h3>
+                </a>
+
+                <a href="#" class="category-card bg-white rounded-lg p-6 text-center shadow-sm hover:shadow-md transition duration-300">
+                    <div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                        <i class="fas fa-heart text-red-600 text-xl"></i>
+                    </div>
+                    <h3 class="font-medium text-gray-800">Romance</h3>
+                </a>
+
+                <a href="#" class="category-card bg-white rounded-lg p-6 text-center shadow-sm hover:shadow-md transition duration-300">
+                    <div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                        <i class="fas fa-search text-purple-600 text-xl"></i>
+                    </div>
+                    <h3 class="font-medium text-gray-800">Mystery</h3>
+                </a>
+
+                <a href="#" class="category-card bg-white rounded-lg p-6 text-center shadow-sm hover:shadow-md transition duration-300">
+                    <div class="w-16 h-16 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                        <i class="fas fa-rocket text-indigo-600 text-xl"></i>
+                    </div>
+                    <h3 class="font-medium text-gray-800">Sci-Fi</h3>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Special Offers -->
+    <section class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-center mb-10">
+                <h2 class="text-3xl font-bold text-gray-800">Special Offers</h2>
+                <div class="flex space-x-2">
+                    <button id="prev-offer" class="p-2 rounded-full bg-gray-200 hover:bg-gray-300">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <button id="next-offer" class="p-2 rounded-full bg-gray-200 hover:bg-gray-300">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="relative overflow-hidden">
+                <div id="offer-slider" class="flex transition-transform duration-300">
+                    <!-- Offer 1 -->
+                    <div class="offer-slide min-w-full md:min-w-1/2 lg:min-w-1/3">
+                        <div class="bg-gradient-to-r from-blue-500 to-blue-600 rounded-xl p-8 text-white">
+                            <div class="flex flex-col md:flex-row items-center">
+                                <div class="md:w-1/3 mb-6 md:mb-0">
+                                    <img src="https://images.unsplash.com/photo-1544716278-e513176f20b5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=774&q=80" alt="Book Bundle" class="w-full h-auto rounded-lg shadow-lg">
+                                </div>
+                                <div class="md:w-2/3 md:pl-8">
+                                    <h3 class="text-2xl font-bold mb-3">Summer Reading Bundle</h3>
+                                    <p class="mb-4">Get 3 bestselling books for the price of 2. Perfect for your summer vacation reading list.</p>
+                                    <div class="flex items-center mb-4">
+                                        <span class="text-3xl font-bold">$24.99</span>
+                                        <span class="ml-3 line-through text-blue-200">$37.47</span>
+                                        <span class="ml-3 bg-yellow-400 text-blue-800 px-2 py-1 rounded text-xs font-bold">33% OFF</span>
+                                    </div>
+                                    <button class="bg-white hover:bg-gray-100 text-blue-600 px-6 py-2 rounded-full font-medium transition duration-300">Get This Deal</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Offer 2 -->
+                    <div class="offer-slide min-w-full md:min-w-1/2 lg:min-w-1/3">
+                        <div class="bg-gradient-to-r from-purple-500 to-purple-600 rounded-xl p-8 text-white">
+                            <div class="flex flex-col md:flex-row items-center">
+                                <div class="md:w-1/3 mb-6 md:mb-0">
+                                    <img src="https://images.unsplash.com/photo-1541963463532-d68292c34b19?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=776&q=80" alt="Classic Book" class="w-full h-auto rounded-lg shadow-lg">
+                                </div>
+                                <div class="md:w-2/3 md:pl-8">
+                                    <h3 class="text-2xl font-bold mb-3">Classics Collection</h3>
+                                    <p class="mb-4">Timeless classics at unbeatable prices. Buy 2, get 1 free on all classic literature.</p>
+                                    <div class="flex items-center mb-4">
+                                        <span class="text-3xl font-bold">$19.98</span>
+                                        <span class="ml-3 line-through text-purple-200">$29.97</span>
+                                        <span class="ml-3 bg-yellow-400 text-purple-800 px-2 py-1 rounded text-xs font-bold">33% OFF</span>
+                                    </div>
+                                    <button class="bg-white hover:bg-gray-100 text-purple-600 px-6 py-2 rounded-full font-medium transition duration-300">Get This Deal</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Offer 3 -->
+                    <div class="offer-slide min-w-full md:min-w-1/2 lg:min-w-1/3">
+                        <div class="bg-gradient-to-r from-green-500 to-green-600 rounded-xl p-8 text-white">
+                            <div class="flex flex-col md:flex-row items-center">
+                                <div class="md:w-1/3 mb-6 md:mb-0">
+                                    <img src="https://images.unsplash.com/photo-1589998059171-988d322dfe03?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=772&q=80" alt="Self-help Book" class="w-full h-auto rounded-lg shadow-lg">
+                                </div>
+                                <div class="md:w-2/3 md:pl-8">
+                                    <h3 class="text-2xl font-bold mb-3">Personal Growth Pack</h3>
+                                    <p class="mb-4">Transform your life with our curated selection of personal development books at 25% off.</p>
+                                    <div class="flex items-center mb-4">
+                                        <span class="text-3xl font-bold">$29.99</span>
+                                        <span class="ml-3 line-through text-green-200">$39.99</span>
+                                        <span class="ml-3 bg-yellow-400 text-green-800 px-2 py-1 rounded text-xs font-bold">25% OFF</span>
+                                    </div>
+                                    <button class="bg-white hover:bg-gray-100 text-green-600 px-6 py-2 rounded-full font-medium transition duration-300">Get This Deal</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="py-16 bg-gray-100">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-gray-800 mb-10 text-center">What Our Readers Say</h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Testimonial 1 -->
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <div class="flex items-center mb-4">
+                        <div class="flex text-yellow-400">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                    </div>
+                    <p class="text-gray-600 mb-4">"The best bookstore I've ever shopped at! Their recommendations are always spot on, and the shipping is super fast."</p>
+                    <div class="flex items-center">
+                        <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Customer" class="w-10 h-10 rounded-full mr-3">
+                        <div>
+                            <h4 class="font-medium text-gray-800">Sarah Johnson</h4>
+                            <p class="text-gray-500 text-sm">Book Club Member</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Testimonial 2 -->
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <div class="flex items-center mb-4">
+                        <div class="flex text-yellow-400">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star-half-alt"></i>
+                        </div>
+                    </div>
+                    <p class="text-gray-600 mb-4">"I love their curated collections and the staff picks section. Found so many great books I wouldn't have discovered otherwise."</p>
+                    <div class="flex items-center">
+                        <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Customer" class="w-10 h-10 rounded-full mr-3">
+                        <div>
+                            <h4 class="font-medium text-gray-800">Michael Chen</h4>
+                            <p class="text-gray-500 text-sm">Avid Reader</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Testimonial 3 -->
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <div class="flex items-center mb-4">
+                        <div class="flex text-yellow-400">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                    </div>
+                    <p class="text-gray-600 mb-4">"Their customer service is exceptional. When I had an issue with my order, they resolved it immediately and went above and beyond."</p>
+                    <div class="flex items-center">
+                        <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="Customer" class="w-10 h-10 rounded-full mr-3">
+                        <div>
+                            <h4 class="font-medium text-gray-800">Emily Rodriguez</h4>
+                            <p class="text-gray-500 text-sm">Loyal Customer</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Newsletter -->
+    <section class="py-16 bg-blue-600 text-white">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-3xl font-bold mb-4">Stay Updated</h2>
+            <p class="text-xl mb-8 max-w-2xl mx-auto">Subscribe to our newsletter for the latest book releases, exclusive deals, and literary events.</p>
+
+            <div class="max-w-md mx-auto flex">
+                <input type="email" placeholder="Your email address" class="flex-grow px-4 py-3 rounded-l-lg focus:outline-none text-gray-800">
+                <button class="bg-blue-800 hover:bg-blue-900 px-6 py-3 rounded-r-lg font-medium transition duration-300">Subscribe</button>
+            </div>
+
+            <p class="text-sm mt-4 text-blue-200">We respect your privacy. Unsubscribe at any time.</p>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <div class="flex items-center space-x-2 mb-4">
+                        <i class="fas fa-book-open text-blue-400 text-2xl"></i>
+                        <h3 class="text-2xl font-bold">Fahasha</h3>
+                    </div>
+                    <p class="text-gray-400 mb-4">Your destination for discovering and buying great books.</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-goodreads"></i></a>
+                    </div>
+                </div>
+
+                <div>
+                    <h4 class="text-lg font-bold mb-4">Shop</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white">All Books</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">New Releases</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Bestsellers</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Deals & Offers</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Gift Cards</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="text-lg font-bold mb-4">About</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white">Our Story</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Careers</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Blog</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Events</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Contact Us</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="text-lg font-bold mb-4">Help</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white">FAQs</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Shipping</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Returns</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Order Status</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Privacy Policy</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="border-t border-gray-800 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
+                <p class="text-gray-400 mb-4 md:mb-0">© 2023 Fahasha. All rights reserved.</p>
+                <div class="flex space-x-6">
+                    <img src="https://via.placeholder.com/40x25" alt="Visa" class="h-6">
+                    <img src="https://via.placeholder.com/40x25" alt="Mastercard" class="h-6">
+                    <img src="https://via.placeholder.com/40x25" alt="Amex" class="h-6">
+                    <img src="https://via.placeholder.com/40x25" alt="PayPal" class="h-6">
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Login Modal -->
+    <div id="login-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-lg w-full max-w-md p-8 mx-4">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold text-gray-800">Login to Fahasha</h2>
+                <button id="close-login" class="text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <form id="login-form">
+                <div class="mb-4">
+                    <label for="email" class="block text-gray-700 mb-2">Email</label>
+                    <input type="email" id="email" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                </div>
+
+                <div class="mb-6">
+                    <label for="password" class="block text-gray-700 mb-2">Password</label>
+                    <input type="password" id="password" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                </div>
+
+                <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg font-medium transition duration-300 mb-4">
+                    Login
+                </button>
+
+                <div class="text-center">
+                    <a href="#" class="text-blue-600 hover:text-blue-800 text-sm">Forgot password?</a>
+                    <p class="text-gray-600 mt-4">Don't have an account? <a href="#" id="show-register" class="text-blue-600 hover:text-blue-800">Sign up</a></p>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Registration Modal -->
+    <div id="register-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-lg w-full max-w-md p-8 mx-4">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold text-gray-800">Create Account</h2>
+                <button id="close-register" class="text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <form id="register-form">
+                <div class="mb-4">
+                    <label for="reg-name" class="block text-gray-700 mb-2">Full Name</label>
+                    <input type="text" id="reg-name" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                </div>
+
+                <div class="mb-4">
+                    <label for="reg-email" class="block text-gray-700 mb-2">Email</label>
+                    <input type="email" id="reg-email" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                </div>
+
+                <div class="mb-4">
+                    <label for="reg-password" class="block text-gray-700 mb-2">Password</label>
+                    <input type="password" id="reg-password" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                </div>
+
+                <div class="mb-6">
+                    <label for="reg-confirm" class="block text-gray-700 mb-2">Confirm Password</label>
+                    <input type="password" id="reg-confirm" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                </div>
+
+                <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg font-medium transition duration-300 mb-4">
+                    Register
+                </button>
+
+                <div class="text-center">
+                    <p class="text-gray-600">Already have an account? <a href="#" id="show-login" class="text-blue-600 hover:text-blue-800">Login</a></p>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Account Info Modal -->
+    <div id="account-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-lg w-full max-w-md p-8 mx-4">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold text-gray-800">My Account</h2>
+                <button id="close-account" class="text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <div class="flex flex-col items-center mb-6">
+                <div class="w-24 h-24 bg-blue-100 rounded-full flex items-center justify-center mb-4">
+                    <i class="fas fa-user text-blue-600 text-3xl"></i>
+                </div>
+                <h3 id="account-name" class="text-xl font-bold text-gray-800">John Doe</h3>
+                <p id="account-email" class="text-gray-600">john.doe@example.com</p>
+            </div>
+
+            <div class="space-y-4 mb-6">
+                <div class="flex items-center p-3 bg-gray-100 rounded-lg">
+                    <i class="fas fa-shopping-cart text-blue-600 mr-3"></i>
+                    <span>Đơn hàng của tôi</span>
+                </div>
+                <div class="flex items-center p-3 bg-gray-100 rounded-lg">
+                    <i class="fas fa-heart text-red-500 mr-3"></i>
+                    <span>Mục yêu thích</span>
+                </div>
+                <div class="flex items-center p-3 bg-gray-100 rounded-lg">
+                    <i class="fas fa-cog text-gray-600 mr-3"></i>
+                    <span>Cài đặt tài khoản</span>
+                </div>
+            </div>
+
+            <button id="logout-btn" class="w-full bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded-lg font-medium transition duration-300">
+                Logout
+            </button>
+        </div>
+    </div>
+
+    <!-- Shopping Cart Modal -->
+    <div id="cart-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-lg w-full max-w-md p-6 mx-4 max-h-[80vh] overflow-y-auto">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold text-gray-800">Giỏ hàng của bạn</h2>
+                <button id="close-cart" class="text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <div id="cart-items" class="mb-6">
+                <!-- Cart items will be dynamically inserted here -->
+                <div class="text-center py-8 text-gray-500">
+                    <i class="fas fa-shopping-cart text-4xl mb-4"></i>
+                    <p>Giỏ hàng của bạn rỗng</p>
+                </div>
+            </div>
+
+            <div class="border-t border-gray-200 pt-4">
+                <div class="flex justify-between mb-2">
+                    <span class="text-gray-600">Subtotal</span>
+                    <span id="cart-subtotal" class="font-medium">$0.00</span>
+                </div>
+                <div class="flex justify-between mb-4">
+                    <span class="text-gray-600">Shipping</span>
+                    <span class="font-medium">Free</span>
+                </div>
+                <div class="flex justify-between text-lg font-bold mb-6">
+                    <span>Total</span>
+                    <span id="cart-total" class="text-red-600">$0.00</span>
+                </div>
+
+                <button id="checkout-btn" class="w-full bg-red-600 hover:bg-red-700 text-white py-3 px-4 rounded-lg font-medium transition duration-300 mb-4">
+                    Proceed to Checkout
+                </button>
+
+                <button id="continue-shopping" class="w-full bg-white hover:bg-gray-100 text-gray-800 border border-gray-300 py-3 px-4 rounded-lg font-medium transition duration-300">
+                    Continue Shopping
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // User state management
+        let currentUser = null;
+
+        // Shopping cart state
+        let cart = [];
+
+        // DOM elements
+        const cartBtn = document.getElementById('cart-btn');
+        const cartModal = document.getElementById('cart-modal');
+        const closeCart = document.getElementById('close-cart');
+        const cartItemsContainer = document.getElementById('cart-items');
+        const cartSubtotal = document.getElementById('cart-subtotal');
+        const cartTotal = document.getElementById('cart-total');
+        const cartBadge = document.getElementById('cart-badge');
+        const checkoutBtn = document.getElementById('checkout-btn');
+        const continueShoppingBtn = document.getElementById('continue-shopping');
+        const addToCartButtons = document.querySelectorAll('.add-to-cart');
+
+        // Modal elements
+        const accountBtn = document.getElementById('account-btn');
+        const accountModal = document.getElementById('account-modal');
+        const closeAccount = document.getElementById('close-account');
+        const loginBtn = accountBtn; // Same button for login/account
+        const loginModal = document.getElementById('login-modal');
+        const closeLogin = document.getElementById('close-login');
+        const registerModal = document.getElementById('register-modal');
+        const closeRegister = document.getElementById('close-register');
+        const showRegister = document.getElementById('show-register');
+        const showLogin = document.getElementById('show-login');
+        const logoutBtn = document.getElementById('logout-btn');
+
+        // Form elements
+        const loginForm = document.getElementById('login-form');
+        const registerForm = document.getElementById('register-form');
+        const accountName = document.getElementById('account-name');
+        const accountEmail = document.getElementById('account-email');
+
+        // Initialize the cart from localStorage
+        function initCart() {
+            const savedCart = localStorage.getItem('cart');
+            if (savedCart) {
+                cart = JSON.parse(savedCart);
+                updateCartUI();
+            }
+        }
+
+        // Save cart to localStorage
+        function saveCart() {
+            localStorage.setItem('cart', JSON.stringify(cart));
+        }
+
+        // Add item to cart
+        function addToCart(item) {
+            // Check if item already exists in cart
+            const existingItem = cart.find(cartItem => cartItem.id === item.id);
+
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                cart.push({
+                    ...item,
+                    quantity: 1
+                });
+            }
+
+            saveCart();
+            updateCartUI();
+
+            // Show success animation
+            const button = document.querySelector(`.add-to-cart[data-id="${item.id}"]`);
+            if (button) {
+                button.innerHTML = '<i class="fas fa-check mr-1"></i> Added';
+                button.classList.remove('bg-blue-600', 'hover:bg-blue-700');
+                button.classList.add('bg-green-500', 'hover:bg-green-600');
+
+                setTimeout(() => {
+                    button.innerHTML = 'Add to Cart';
+                    button.classList.remove('bg-green-500', 'hover:bg-green-600');
+                    button.classList.add('bg-blue-600', 'hover:bg-blue-700');
+                }, 2000);
+            }
+        }
+
+        // Remove item from cart
+        function removeFromCart(itemId) {
+            cart = cart.filter(item => item.id !== itemId);
+            saveCart();
+            updateCartUI();
+        }
+
+        // Update item quantity in cart
+        function updateQuantity(itemId, newQuantity) {
+            const item = cart.find(item => item.id === itemId);
+            if (item) {
+                item.quantity = newQuantity;
+                if (item.quantity <= 0) {
+                    removeFromCart(itemId);
+                } else {
+                    saveCart();
+                    updateCartUI();
+                }
+            }
+        }
+
+        // Calculate cart subtotal
+        function calculateSubtotal() {
+            return cart.reduce((total, item) => total + (parseFloat(item.price) * item.quantity), 0);
+        }
+
+        // Update cart UI
+        function updateCartUI() {
+            // Update cart badge
+            const itemCount = cart.reduce((count, item) => count + item.quantity, 0);
+            if (itemCount > 0) {
+                cartBadge.textContent = itemCount;
+                cartBadge.classList.remove('hidden');
+            } else {
+                cartBadge.classList.add('hidden');
+            }
+
+            // Update cart modal
+            if (cart.length === 0) {
+                cartItemsContainer.innerHTML = `
+                                        <div class="text-center py-8 text-gray-500">
+                                            <i class="fas fa-shopping-cart text-4xl mb-4"></i>
+                                            <p>Your cart is empty</p>
+                                        </div>
+                                    `;
+                cartSubtotal.textContent = '$0.00';
+                cartTotal.textContent = '$0.00';
+                checkoutBtn.classList.add('opacity-50', 'cursor-not-allowed');
+                return;
+            }
+
+            checkoutBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+
+            cartItemsContainer.innerHTML = cart.map(item => `
+                                    <div class="flex items-center py-4 border-b border-gray-200">
+                                        <div class="w-16 h-16 bg-gray-100 rounded flex-shrink-0 overflow-hidden">
+                                            <img src="${item.image}" alt="${item.title}" class="w-full h-full object-cover">
+                                        </div>
+                                        <div class="ml-4 flex-grow">
+                                            <h3 class="font-medium text-gray-800">${item.title}</h3>
+                                            <p class="text-sm text-gray-600">${item.author}</p>
+                                            <div class="flex items-center mt-1">
+                                                <button class="decrease-quantity text-gray-500 hover:text-red-600" data-id="${item.id}">
+                                                    <i class="fas fa-minus text-xs"></i>
+                                                </button>
+                                                <input type="number" min="1" value="${item.quantity}"
+                                                       class="quantity-input w-12 text-center border border-gray-300 rounded mx-2 py-1 text-sm"
+                                                       data-id="${item.id}">
+                                                <button class="increase-quantity text-gray-500 hover:text-green-600" data-id="${item.id}">
+                                                    <i class="fas fa-plus text-xs"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div class="ml-4 text-right">
+                                            <span class="font-medium">$${(parseFloat(item.price) * item.quantity).toFixed(2)}</span>
+                                            <button class="remove-item block text-red-500 hover:text-red-700 mt-1 text-sm" data-id="${item.id}">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                `).join('');
+
+            const subtotal = calculateSubtotal();
+            cartSubtotal.textContent = `$${subtotal.toFixed(2)}`;
+            cartTotal.textContent = `$${subtotal.toFixed(2)}`;
+
+            // Add event listeners to quantity controls
+            document.querySelectorAll('.decrease-quantity').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const itemId = e.target.closest('button').dataset.id;
+                    const item = cart.find(item => item.id === itemId);
+                    if (item) {
+                        updateQuantity(itemId, item.quantity - 1);
+                    }
+                });
+            });
+
+            document.querySelectorAll('.increase-quantity').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const itemId = e.target.closest('button').dataset.id;
+                    const item = cart.find(item => item.id === itemId);
+                    if (item) {
+                        updateQuantity(itemId, item.quantity + 1);
+                    }
+                });
+            });
+
+            document.querySelectorAll('.quantity-input').forEach(input => {
+                input.addEventListener('change', (e) => {
+                    const itemId = e.target.dataset.id;
+                    const newQuantity = parseInt(e.target.value);
+                    if (!isNaN(newQuantity) && newQuantity > 0) {
+                        updateQuantity(itemId, newQuantity);
+                    }
+                });
+            });
+
+            document.querySelectorAll('.remove-item').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const itemId = e.target.closest('button').dataset.id;
+                    removeFromCart(itemId);
+                });
+            });
+        }
+
+        // Initialize cart on page load
+        initCart();
+
+        // Cart modal toggle
+        cartBtn.addEventListener('click', () => {
+            cartModal.classList.remove('hidden');
+        });
+
+        closeCart.addEventListener('click', () => {
+            cartModal.classList.add('hidden');
+        });
+
+        continueShoppingBtn.addEventListener('click', () => {
+            cartModal.classList.add('hidden');
+        });
+
+        // Close cart when clicking outside
+        cartModal.addEventListener('click', (e) => {
+            if (e.target === cartModal) {
+                cartModal.classList.add('hidden');
+            }
+        });
+
+        // Checkout button
+        checkoutBtn.addEventListener('click', () => {
+            if (cart.length === 0) return;
+
+            if (!currentUser) {
+                cartModal.classList.add('hidden');
+                loginModal.classList.remove('hidden');
+                alert('Please login to proceed to checkout.');
+            } else {
+                alert('Proceeding to checkout with ' + cart.reduce((count, item) => count + item.quantity, 0) + ' items.');
+                // In a real app, you would redirect to checkout page
+            }
+        });
+
+        // Add to cart buttons
+        addToCartButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const item = {
+                    id: button.dataset.id,
+                    title: button.dataset.title,
+                    author: button.dataset.author,
+                    price: button.dataset.price,
+                    image: button.dataset.image
+                };
+                addToCart(item);
+            });
+        });
+
+        // Toggle account modal
+        accountBtn.addEventListener('click', () => {
+            if (currentUser) {
+                // Show account info if logged in
+                accountModal.classList.remove('hidden');
+            } else {
+                // Show login modal if not logged in
+                loginModal.classList.remove('hidden');
+            }
+        });
+
+        // Close modals
+        closeAccount.addEventListener('click', () => {
+            accountModal.classList.add('hidden');
+        });
+
+        closeLogin.addEventListener('click', () => {
+            loginModal.classList.add('hidden');
+        });
+
+        closeRegister.addEventListener('click', () => {
+            registerModal.classList.add('hidden');
+        });
+
+        // Switch between login and register modals
+        showRegister.addEventListener('click', (e) => {
+            e.preventDefault();
+            loginModal.classList.add('hidden');
+            registerModal.classList.remove('hidden');
+        });
+
+        showLogin.addEventListener('click', (e) => {
+            e.preventDefault();
+            registerModal.classList.add('hidden');
+            loginModal.classList.remove('hidden');
+        });
+
+        // Close modals when clicking outside
+        accountModal.addEventListener('click', (e) => {
+            if (e.target === accountModal) {
+                accountModal.classList.add('hidden');
+            }
+        });
+
+        loginModal.addEventListener('click', (e) => {
+            if (e.target === loginModal) {
+                loginModal.classList.add('hidden');
+            }
+        });
+
+        registerModal.addEventListener('click', (e) => {
+            if (e.target === registerModal) {
+                registerModal.classList.add('hidden');
+            }
+        });
+
+        // Login form submission
+        loginForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            // In a real app, you would validate credentials with a server
+            // For demo purposes, we'll just simulate a successful login
+            currentUser = {
+                name: "Ha Gia Bao",
+                email: email
+            };
+
+            // Update account info
+            accountName.textContent = currentUser.name;
+            accountEmail.textContent = currentUser.email;
+
+            // Close login modal and show account info
+            loginModal.classList.add('hidden');
+            accountModal.classList.remove('hidden');
+
+            // Change icon to indicate logged in state
+            const userIcon = accountBtn.querySelector('i');
+            userIcon.classList.remove('text-gray-700');
+            userIcon.classList.add('text-green-500');
+        });
+
+        // Register form submission
+        registerForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const name = document.getElementById('reg-name').value;
+            const email = document.getElementById('reg-email').value;
+            const password = document.getElementById('reg-password').value;
+            const confirm = document.getElementById('reg-confirm').value;
+
+            if (password !== confirm) {
+                alert('Passwords do not match!');
+                return;
+            }
+
+            // In a real app, you would register the user with a server
+            // For demo purposes, we'll just simulate a successful registration
+            currentUser = {
+                name: name,
+                email: email
+            };
+
+            // Update account info
+            accountName.textContent = currentUser.name;
+            accountEmail.textContent = currentUser.email;
+
+            // Close register modal and show account info
+            registerModal.classList.add('hidden');
+            accountModal.classList.remove('hidden');
+
+            // Change icon to indicate logged in state
+            const userIcon = accountBtn.querySelector('i');
+            userIcon.classList.remove('text-gray-700');
+            userIcon.classList.add('text-green-500');
+
+            alert('Registration successful! You are now logged in.');
+        });
+
+        // Logout functionality
+        logoutBtn.addEventListener('click', () => {
+            currentUser = null;
+            accountModal.classList.add('hidden');
+
+            // Change icon back to default
+            const userIcon = accountBtn.querySelector('i');
+            userIcon.classList.remove('text-green-500');
+            userIcon.classList.add('text-gray-700');
+
+            // Show login modal
+            loginModal.classList.remove('hidden');
+        });
+
+        // Mobile menu toggle
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // Special offers slider
+        const offerSlider = document.getElementById('offer-slider');
+        const prevOffer = document.getElementById('prev-offer');
+        const nextOffer = document.getElementById('next-offer');
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.offer-slide');
+        const slideCount = slides.length;
+
+        function updateSlider() {
+            let offset;
+            if (window.innerWidth >= 1024) {
+                offset = -currentSlide * 33.3333;
+            } else if (window.innerWidth >= 768) {
+                offset = -currentSlide * 50;
+            } else {
+                offset = -currentSlide * 100;
+            }
+            offerSlider.style.transform = `translateX(${offset}%)`;
+        }
+
+        prevOffer.addEventListener('click', () => {
+            currentSlide = (currentSlide - 1 + slideCount) % slideCount;
+            updateSlider();
+        });
+
+        nextOffer.addEventListener('click', () => {
+            currentSlide = (currentSlide + 1) % slideCount;
+            updateSlider();
+        });
+
+        // Responsive slider adjustment
+        window.addEventListener('resize', updateSlider);
+
+        // Initialize slider
+        updateSlider();
+    </script>
+</body>
+</html>
+
